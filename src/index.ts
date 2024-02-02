@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import compression from "compression";
+const { port } = require("./core/config");
 
 const app = express();
 app.use(cors());
@@ -17,6 +18,6 @@ app.get("/", (req, res) => {
 
 const server = http.createServer(app);
 
-server.listen(8080, () => {
-  console.log("Server running on http://localhost:8080");
+server.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
 });
