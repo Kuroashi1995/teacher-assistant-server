@@ -3,32 +3,32 @@ type Turn = "morning" | "afternoon" | "night";
 
 export class User {
   id?: number;
-  name: string;
+  firstName: string;
   lastName: string;
   level: Level;
   enrollDate: Date;
   birthDate: Date;
   turn: Turn;
-  isAdmin: boolean;
-  isTeacher: boolean;
-  phoneNumber: string;
+  isAdmin?: boolean;
+  isTeacher?: boolean;
+  phoneNumber?: string;
   constructor({
     id,
-    name,
+    firstName,
     lastName,
     level = "beginner",
     enrollDate,
     birthDate,
     turn,
-    isAdmin,
-    isTeacher,
+    isAdmin = false,
+    isTeacher = false,
     phoneNumber,
   }: {
     /**
      * The id number corresponding to the DB, usually comes with the data
      */
     id?: number;
-    name: string;
+    firstName: string;
     lastName: string;
     /**
      * The student's current level of english
@@ -43,15 +43,15 @@ export class User {
     /**
      * If the user is an admin of the platform
      */
-    isAdmin: boolean;
+    isAdmin?: boolean;
     /**
      * If the user is a teacher
      */
-    isTeacher: boolean;
-    phoneNumber: string;
+    isTeacher?: boolean;
+    phoneNumber?: string;
   }) {
     this.id = id;
-    this.name = name;
+    this.firstName = firstName;
     this.lastName = lastName;
     this.level = level;
     this.enrollDate = enrollDate;
@@ -78,7 +78,7 @@ export class User {
   static fromData(data: any): User {
     return new User({
       id: data.id,
-      name: data.name,
+      firstName: data.first_name,
       lastName: data.last_name,
       level: data.level,
       enrollDate: data.enroll_date,
@@ -95,7 +95,7 @@ export class User {
    */
   toData() {
     return {
-      name: this.name,
+      first_name: this.firstName,
       last_name: this.lastName,
       level: this.level,
       enroll_date: this.enrollDate,
