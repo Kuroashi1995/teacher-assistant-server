@@ -77,7 +77,7 @@ export class User {
    */
   static fromData(data: any): User {
     return new User({
-      id: data.id,
+      id: data.user_id,
       firstName: data.first_name,
       lastName: data.last_name,
       level: data.level,
