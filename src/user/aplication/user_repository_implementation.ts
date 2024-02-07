@@ -13,10 +13,16 @@ export class UserRepository implements UserRepositoryInterface {
   }) {
     this.userDatabase = userDatabase;
   }
+
   async getAllUsers(): Promise<User[]> {
     return await this.userDatabase.getAllUsers();
   }
+
   async getUserById(id: string): Promise<User> {
     return await this.userDatabase.getUserById(id);
+  }
+
+  async saveUser(user: User): Promise<User> {
+    return await this.userDatabase.saveUser(user);
   }
 }
