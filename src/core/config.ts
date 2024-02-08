@@ -11,6 +11,13 @@ const config = {
     user: process.env.DB_USER || "postgres",
     password: process.env.DB_PASSWORD || "password",
   },
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    expiration: process.env.JWT_EXPIRATION,
+  },
+  cryptr: {
+    key: process.env.CRYPTR_KEY,
+  },
 };
 
 export { config };
