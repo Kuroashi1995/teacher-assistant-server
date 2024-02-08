@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import http from "http";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
@@ -12,7 +12,8 @@ import { Database } from "./core/services/db";
 import { authRouter } from "./auth/presentation/auth_router";
 import { AuthRepository } from "./auth/aplication/auth_repository_Implementation";
 import { CredentialsDatabase } from "./auth/infrastructure/credentials_database";
-import { SignUpUseCase } from "./auth/aplication/sign_up_use_case";
+import { SignUpAndLoginUseCase } from "./auth/aplication/sign_up_use_case";
+import { authValidator } from "./core/middlewares/auth_validator";
 
 const app = express();
 app.use(cors());
@@ -21,9 +22,15 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 
 //todo: improve routing and naming, route api is missing
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+app.get(
+  "/",
+  authValidator,
+  async (req: Request, res: Response, next: NextFunction) => {
+    // const { Authorization } = req.headers;
+    // console.log({ Authorization });
+    res.status(200).send("OK");
+  }
+);
 
 app.use(
   "/auth",
@@ -33,7 +40,7 @@ app.use(
         databaseService: new Database(),
       }),
     }),
-    signUpUseCase: new SignUpUseCase({
+    signUpAndLoginUseCase: new SignUpAndLoginUseCase({
       authRepository: new AuthRepository({
         credentialsDatabase: new CredentialsDatabase({
           databaseService: new Database(),
