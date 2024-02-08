@@ -2,12 +2,13 @@ import { User } from "../../user/domain/model";
 import { UserRepository } from "../../user/aplication/user_repository_implementation";
 import { AuthRepository } from "./auth_repository_Implementation";
 import { Credentials } from "../domain/credentials";
-const simplecrypt = require("simplecrypt");
+import Cryptr from "cryptr";
+import { config } from "../../core/config";
 
-export class SignUpUseCase {
+export class SignUpAndLoginUseCase {
   private userRepository: UserRepository;
   private authRepository: AuthRepository;
-  sc;
+  private cr;
 
   constructor({
     userRepository,
@@ -18,7 +19,7 @@ export class SignUpUseCase {
   }) {
     this.userRepository = userRepository;
     this.authRepository = authRepository;
-    this.sc = simplecrypt();
+    this.cr = new Cryptr(config.cryptr.key);
   }
 
   userAndCredentialsFromData(data: any) {
@@ -35,8 +36,7 @@ export class SignUpUseCase {
     credentials: Credentials;
   }): Promise<boolean> {
     const savedUser = await this.userRepository.saveUser(user);
-    console.log({ savedUser });
-    credentials.password = this.sc.encrypt(credentials.password);
+    credentials.password = this.cr.encrypt(credentials.password);
     credentials.userId = savedUser.id;
     const savedCredentials = await this.authRepository.saveCredentials({
       credentials,
@@ -45,6 +45,24 @@ export class SignUpUseCase {
       return true;
     } else {
       return false;
+    }
+  }
+  async validateLogin({
+    usernameOrEmail,
+    password,
+  }: {
+    usernameOrEmail: string;
+    password: string;
+  }): Promise<{ code: number; message: string }> {
+    const credentials = await this.authRepository.getCredentials({
+      usernameOrEmail,
+    });
+    if (!credentials) {
+      return { code: 401, message: "User not found" };
+    } else if (this.cr.decrypt(credentials.password) !== password) {
+      return { code: 401, message: "incorrect username/email or password" };
+    } else {
+      return { code: 200, message: "logged in" };
     }
   }
 }
