@@ -1,13 +1,13 @@
 import { AuthRepository } from "../aplication/auth_repository_Implementation";
 import { Router, Request, Response, NextFunction } from "express";
-import { SignUpUseCase } from "../aplication/sign_up_use_case";
+import { SignUpAndLoginUseCase } from "../aplication/sign_up_use_case";
 
 export function authRouter({
   authRepository,
-  signUpUseCase,
+  signUpAndLoginUseCase,
 }: {
   authRepository: AuthRepository;
-  signUpUseCase: SignUpUseCase;
+  signUpAndLoginUseCase: SignUpAndLoginUseCase;
 }) {
   const authRouter = Router();
 
@@ -16,8 +16,8 @@ export function authRouter({
     async (req: Request, res: Response, next: NextFunction) => {
       const data = req.body;
       const { user, credentials } =
-        signUpUseCase.userAndCredentialsFromData(data);
-      const success = await signUpUseCase.saveUserAndData({
+        signUpAndLoginUseCase.userAndCredentialsFromData(data);
+      const success = await signUpAndLoginUseCase.saveUserAndData({
         user,
         credentials,
       });
@@ -28,6 +28,18 @@ export function authRouter({
       } else {
         res.send(500);
       }
+    }
+  );
+
+  authRouter.post(
+    "/login",
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { usernameOrEmail, password } = req.body;
+      const { code, message } = await signUpAndLoginUseCase.validateLogin({
+        usernameOrEmail,
+        password,
+      });
+      res.status(code).send({ message: message });
     }
   );
   return authRouter;
