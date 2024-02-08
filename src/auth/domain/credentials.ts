@@ -23,7 +23,7 @@ export class Credentials {
 
   static fromData(data: any) {
     return new Credentials({
-      password: data.password,
+      password: data.user_password,
       userEmail: data.user_email,
       userId: data.user_id,
       username: data.username,
@@ -32,7 +32,7 @@ export class Credentials {
 
   toData() {
     return {
-      password: this.password,
+      user_password: this.password,
       user_email: this.userEmail,
       username: this.username,
       user_id: this.userId,
