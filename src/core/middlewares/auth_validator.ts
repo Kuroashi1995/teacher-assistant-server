@@ -42,7 +42,7 @@ export async function authValidator(
         secretByteLen === inputByteLen &&
         mockedCredentials.username === decodedUsername
       ) {
-        res.status(200).send("Authenticated");
+        next();
       } else {
         res.status(401).send("Failed authentication");
       }

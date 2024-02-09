@@ -5,64 +5,29 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import compression from "compression";
 import { config } from "./core/config";
-import userRouter from "./user/presentation/user_router";
-import { UserRepository } from "./user/aplication/user_repository_implementation";
-import { UserDatabase } from "./user/infrastructure/user_database";
-import { Database } from "./core/services/db";
-import { authRouter } from "./auth/presentation/auth_router";
-import { AuthRepository } from "./auth/aplication/auth_repository_Implementation";
-import { CredentialsDatabase } from "./auth/infrastructure/credentials_database";
-import { SignUpAndLoginUseCase } from "./auth/aplication/sign_up_use_case";
 import { authValidator } from "./core/middlewares/auth_validator";
+import { RouterConfiguration } from "./core/routing";
+import { Database } from "./core/services/db";
 
 const app = express();
 app.use(cors());
 app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
+const { appRouter } = new RouterConfiguration({
+  databaseService: new Database(),
+}).config();
 
-//todo: improve routing and naming, route api is missing
+//testing endpoint
 app.get(
   "/",
   authValidator,
   async (req: Request, res: Response, next: NextFunction) => {
-    // const { Authorization } = req.headers;
-    // console.log({ Authorization });
-    res.status(200).send("OK");
+    res.status(200).send("got to /");
   }
 );
+app.use(appRouter);
 
-app.use(
-  "/auth",
-  authRouter({
-    authRepository: new AuthRepository({
-      credentialsDatabase: new CredentialsDatabase({
-        databaseService: new Database(),
-      }),
-    }),
-    signUpAndLoginUseCase: new SignUpAndLoginUseCase({
-      authRepository: new AuthRepository({
-        credentialsDatabase: new CredentialsDatabase({
-          databaseService: new Database(),
-        }),
-      }),
-      userRepository: new UserRepository({
-        userDatabase: new UserDatabase({ databaseService: new Database() }),
-      }),
-    }),
-  })
-);
-
-app.use(
-  "/users",
-  userRouter({
-    userRepository: new UserRepository({
-      userDatabase: new UserDatabase({
-        databaseService: new Database(),
-      }),
-    }),
-  })
-);
 const server = http.createServer(app);
 
 server.listen(config.port, () => {
