@@ -9,15 +9,18 @@ import { authValidator } from "./core/middlewares/auth_validator";
 import { RouterConfiguration } from "./core/routing";
 import { Database } from "./core/services/db";
 
+//app instantiaton
 const app = express();
-app.use(cors());
-app.use(compression());
-app.use(cookieParser());
-app.use(bodyParser.json());
+
+//app routing configuration and dependency injection
 const { appRouter } = new RouterConfiguration({
   databaseService: new Database(),
 }).config();
 
+app.use(cors());
+app.use(compression());
+app.use(cookieParser());
+app.use(bodyParser.json());
 //testing endpoint
 app.get(
   "/",
@@ -26,7 +29,7 @@ app.get(
     res.status(200).send("got to /");
   }
 );
-app.use(appRouter);
+app.use("/api", appRouter);
 
 const server = http.createServer(app);
 
