@@ -5,9 +5,9 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import compression from "compression";
 import { config } from "./core/config";
-import { authValidator } from "./core/middlewares/auth_validator";
 import { RouterConfiguration } from "./core/routing";
 import { Database } from "./core/services/db";
+import { jwtAuthValidator } from "./core/middlewares/jwt_auth_validation";
 
 //app instantiaton
 const app = express();
@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 //testing endpoint
 app.get(
   "/",
-  authValidator,
+  jwtAuthValidator,
   async (req: Request, res: Response, next: NextFunction) => {
     res.status(200).send("got to /");
   }
