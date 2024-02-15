@@ -4,6 +4,7 @@ import { AuthRepository } from "./auth_repository_Implementation";
 import { Credentials } from "../domain/credentials";
 import Cryptr from "cryptr";
 import { config } from "../../core/config";
+import crypto = require("crypto");
 
 export class SignUpAndLoginUseCase {
   private userRepository: UserRepository;
@@ -53,16 +54,36 @@ export class SignUpAndLoginUseCase {
   }: {
     usernameOrEmail: string;
     password: string;
-  }): Promise<{ code: number; message: string }> {
+  }): Promise<User | null> {
     const credentials = await this.authRepository.getCredentials({
       usernameOrEmail,
     });
-    if (!credentials) {
-      return { code: 401, message: "User not found" };
-    } else if (this.cr.decrypt(credentials.password) !== password) {
-      return { code: 401, message: "incorrect username/email or password" };
+    const savedPassword = this.cr.decrypt(credentials.password);
+    console.log({ savedPassword, password });
+
+    const savedPassLen = Buffer.byteLength(savedPassword);
+    const inputPassLen = Buffer.byteLength(password);
+    console.log({ savedPassLen, inputPassLen });
+
+    const inputBuffer = Buffer.alloc(savedPassLen, 0, "utf8");
+    const savedBuffer = Buffer.alloc(inputPassLen, 0, "utf8");
+    inputBuffer.write(password);
+    savedBuffer.write(savedPassword);
+
+    console.log({ inputBuffer, savedBuffer });
+
+    if (
+      (!!crypto.timingSafeEqual(inputBuffer, savedBuffer) &&
+        savedPassLen !== inputPassLen) ||
+      !!credentials
+    ) {
+      console.log("got to else");
+      const user = await this.userRepository.getUserById(
+        credentials.userId.toString()
+      );
+      return user;
     } else {
-      return { code: 200, message: "logged in" };
+      return null;
     }
   }
 }
