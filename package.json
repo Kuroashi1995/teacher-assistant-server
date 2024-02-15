@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@types/dotenv": "^8.2.0",
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/pg": "^8.11.0",
     "body-parser": "^1.20.2",
     "compression": "^1.7.4",
