@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import crypto = require("crypto");
 
-export async function authValidator(
+export async function basicAuthValidator(
   req: Request,
   res: Response,
   next: NextFunction
@@ -14,8 +14,7 @@ export async function authValidator(
     const { authorization } = req.headers;
     console.log({ authorization });
     if (!!!authorization) {
-      console.log("authenticate needed");
-      res.set("WWW-Authenticate", 'Basic realm="401"'); // change this
+      res.set("WWW-Authenticate", 'Basic realm="401"');
       res.status(401).send("Authentication required.");
     } else {
       const code = authorization.split(" ")[1];
