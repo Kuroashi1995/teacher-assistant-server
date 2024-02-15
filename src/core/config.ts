@@ -14,6 +14,9 @@ const config = {
   jwt: {
     secret: process.env.JWT_SECRET,
     expiration: process.env.JWT_EXPIRATION,
+    issuer: process.env.JWT_ISSUER,
+    audience: process.env.JWT_AUDIENCE,
+    refreshTokenExpiration: process.env.JWT_REFRESH_EXPIRATION,
   },
   cryptr: {
     key: process.env.CRYPTR_KEY,
