@@ -21,6 +21,9 @@ const config = {
   cryptr: {
     key: process.env.CRYPTR_KEY,
   },
+  openai: {
+    key: process.env.OPENAI_API_KEY,
+  },
 };
 
 export { config };
