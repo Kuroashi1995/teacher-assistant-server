@@ -1,5 +1,5 @@
 import { User } from "../../user/domain/model";
-import { UserRepository } from "../../user/aplication/user_repository_implementation";
+import { UserRepository } from "../../user/application/user_repository_implementation";
 import { AuthRepository } from "./auth_repository_Implementation";
 import { Credentials } from "../domain/credentials";
 import Cryptr from "cryptr";
