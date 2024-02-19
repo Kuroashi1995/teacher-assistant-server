@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { UserRepository } from "../aplication/user_repository_implementation";
+import { UserRepository } from "../application/user_repository_implementation";
 
 export default function userRouter({
   userRepository,

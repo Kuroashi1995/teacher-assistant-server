@@ -3,7 +3,7 @@ const fsp = fs.promises;
 const { mdToPdf } = require("md-to-pdf");
 
 export class PdfService {
-  async createPdfFromMarkdown({
+  static async createPdfFromMarkdown({
     mdContent,
     pdfPath,
   }: {
@@ -17,7 +17,7 @@ export class PdfService {
     }
   }
 
-  async deletePdf({ pdfPath }: { pdfPath: string }) {
+  static async deletePdf({ pdfPath }: { pdfPath: string }) {
     try {
       await fsp.unlink(pdfPath);
     } catch (e) {

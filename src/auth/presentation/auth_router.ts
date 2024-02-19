@@ -1,6 +1,6 @@
-import { AuthRepository } from "../aplication/auth_repository_Implementation";
+import { AuthRepository } from "../application/auth_repository_Implementation";
 import { Router, Request, Response, NextFunction } from "express";
-import { SignUpAndLoginUseCase } from "../aplication/sign_up_use_case";
+import { SignUpAndLoginUseCase } from "../application/sign_up_use_case";
 import { JwtService } from "../../core/services/jwt";
 
 export function authRouter({

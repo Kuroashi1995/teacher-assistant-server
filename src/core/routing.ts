@@ -1,12 +1,12 @@
 import express from "express";
 import userRouter from "../user/presentation/user_router";
 import { authRouter } from "../auth/presentation/auth_router";
-import { AuthRepository } from "../auth/aplication/auth_repository_Implementation";
+import { AuthRepository } from "../auth/application/auth_repository_Implementation";
 import { Database } from "./services/db";
 import { UserDatabase } from "../user/infrastructure/user_database";
 import { CredentialsDatabase } from "../auth/infrastructure/credentials_database";
-import { UserRepository } from "../user/aplication/user_repository_implementation";
-import { SignUpAndLoginUseCase } from "../auth/aplication/sign_up_use_case";
+import { UserRepository } from "../user/application/user_repository_implementation";
+import { SignUpAndLoginUseCase } from "../auth/application/sign_up_use_case";
 
 /**
  * This class configures routing and dependency injection

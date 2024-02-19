@@ -21,7 +21,7 @@ export class AiService {
     return { content: content, role: "system" };
   }
 
-  async createQuickExercise(description: string) {
+  async queryQuickExercise(description: string) {
     const messages: Message[] = [];
     messages.push(AiService.createSystemMessage(prompts.quickExercise));
     messages.push(AiService.createUserMessage(description));
@@ -29,7 +29,7 @@ export class AiService {
       messages: messages,
       model: "gpt-3.5-turbo",
     });
-    console.log(response.choices[0].message.content);
+    return response.choices[0].message.content;
   }
 }
 
