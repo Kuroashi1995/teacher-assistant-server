@@ -12,6 +12,7 @@ export class PdfService {
   }) {
     try {
       await mdToPdf({ content: mdContent }, { dest: pdfPath });
+      return true;
     } catch (e) {
       throw new Error(`Cannot create pdf: ${e}`);
     }
