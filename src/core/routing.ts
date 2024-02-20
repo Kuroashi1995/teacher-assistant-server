@@ -7,6 +7,9 @@ import { UserDatabase } from "../user/infrastructure/user_database";
 import { CredentialsDatabase } from "../auth/infrastructure/credentials_database";
 import { UserRepository } from "../user/application/user_repository_implementation";
 import { SignUpAndLoginUseCase } from "../auth/application/sign_up_use_case";
+import { ExercisesUseCase } from "../exercises/application/exercises_use_case";
+import { AiService } from "./services/open_ai";
+import exercisesRouter from "../exercises/presentation/exercises_router";
 
 /**
  * This class configures routing and dependency injection
@@ -60,6 +63,7 @@ export class RouterConfiguration {
         authRepository,
         userRepository,
       }),
+      exercisesUseCase: new ExercisesUseCase({ aiService: new AiService() }),
     };
   }
 
@@ -76,15 +80,18 @@ export class RouterConfiguration {
       credentialsDatabase,
       userDatabase,
     });
-    const { signUpAndLoginUseCase } = this.initializeUseCases({
-      authRepository,
-      userRepository,
-    });
+    const { signUpAndLoginUseCase, exercisesUseCase } = this.initializeUseCases(
+      {
+        authRepository,
+        userRepository,
+      }
+    );
     appRouter.use(
       "/auth",
       authRouter({ authRepository, signUpAndLoginUseCase })
     );
     appRouter.use("/users", userRouter({ userRepository }));
+    appRouter.use("/exercises", exercisesRouter({ exercisesUseCase }));
 
     return { appRouter };
   }
