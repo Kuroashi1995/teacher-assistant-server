@@ -7,8 +7,6 @@ import compression from "compression";
 import { config } from "./core/config";
 import { RouterConfiguration } from "./core/routing";
 import { Database } from "./core/services/db";
-import { jwtAuthValidator } from "./core/middlewares/jwt_auth_validation";
-import { AiService } from "./core/services/open_ai";
 
 //app instantiaton
 const app = express();
@@ -27,10 +25,6 @@ app.get(
   "/",
   // jwtAuthValidator,
   async (req: Request, res: Response, next: NextFunction) => {
-    const { description } = req.body;
-    console.log({ description });
-    const openai = new AiService();
-    await openai.createQuickExercise(description);
     res.status(200).send("got to /");
   }
 );
