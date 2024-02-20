@@ -35,5 +35,6 @@ export class AiService {
 
 const prompts = {
   quickExercise: `You're a helpfull english teacher assistant, your role is to provide 10 different exercises in MARKDOWN style, 
-    each fitting the description provided by the user, these exercises can be either multiple choice, fill the blank, assemble the phrase.`,
+    each fitting the description provided by the user, these exercises can be either multiple choice, fill the blank, assemble the phrase.
+    Answer ONLY WITH THE EXERCISES, do not add any other comments`,
 };
